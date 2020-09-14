@@ -4,7 +4,7 @@ Problem 1
 Apartment buildings are densely packed along a riverside. Although the view of the river is very good from all households as they are so closely crammed with each other, it is often the case that the residents can only see the wall of the next building through the a right or left window. It is said that the sufficient viewing area can be obtained when there is a minimum distance of 2 blocks of open space between the buildings. The prograin should return the number of households having the sufficient viewing area in both sides when the information on buildings is given.
 When there are 8 buildings on a riverside as shown below, 6 households colored green have the sufficient viewing areas since there are at least two blocks of open space to the right and left. Therefore, the program should return 6.
 
-![image problem 1](images/problem1House.jpg)
+![image problem 1](https://github.com/hoangtq219/stc/blob/master/images/problem1House.jpg)
 
 Households A and B have the sufficient left viewing area since there are more than 2 blocks of open space but the right viewing area is not sufficient because there is only one block of open space. The household C has the 2 blocks of open space to the right but only 1 block to the left.
 
@@ -24,7 +24,7 @@ The output file outputs the test case number followińg the '#' symbol. It is fo
 Input Example
 ---
 
-* [Test case](inputs/problem1.txt)
+* [Test case](https://github.com/hoangtq219/stc/blob/master/inputs/problem1.txt)
 
 ```text
 100 
