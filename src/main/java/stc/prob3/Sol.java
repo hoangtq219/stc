@@ -14,7 +14,6 @@ public class Sol {
 
     private AbstractPoint[][] mazePoint;
     private int[][] maze;
-    private Point startPoint;
     private Point finalPoint;
     private int numRows = 100;
     private int numCols = 100;
@@ -48,54 +47,41 @@ public class Sol {
     }
 
     public int director() {
-        finalPoint = new Point(numRows - 1, numCols - 1);
+        // reset maze Point
+        initMazePoint(maze);
 
-        for (int col = 0; col < numRows; col++) {
+        Point point = finalPoint;
 
-            int row = 0;
-            if (maze[row][col] == POINT) {
-                // reset maze Point
-                initMazePoint(maze);
+        // startPoint = finishPoint
+        if (point.getRow() == 0) {
+            return point.getCol();
+        }
 
-                Point point = new Point(row, col);
-                // new start Point
-                startPoint = new Point(row, col);
+        // set startPoint is visited
+        mazePoint[point.getRow()][point.getCol()] = new BlockPoint(point.getRow(), point.getCol());
 
-                // startPoint = finishPoint
-                if (isFinalPoint(point)) {
-                    return point.getCol();
-                }
+        while (canMove(point)) {
+//            System.out.println(point.toString());
 
-                // set startPoint is visited
-                mazePoint[point.getRow()][point.getCol()] = new BlockPoint(point.getRow(), point.getCol());
+            if (canMoveLeft(point)) {
+                point = moveLeft(point);
+            } else if (canMoveRight(point)) {
+                point = moveRight(point);
+            } else if (canMoveUp(point)) {
+                point = moveUp(point);
+            }
 
-                while (canMove(point)) {
-//                    System.out.println(point.toString());
-                    if (canMoveRight(point)) {
-                        point = moveRight(point);
-                    } else if (canMoveLeft(point)) {
-                        point = moveLeft(point);
-                    } else if (canMoveDown(point)) {
-                        point = moveDown(point);
-                    }
+            // set Point is visited (BlockPoint)
+            mazePoint[point.getRow()][point.getCol()] = new BlockPoint(point.getRow(), point.getCol());
 
-                    // set Point is visited (BlockPoint)
-                    mazePoint[point.getRow()][point.getCol()] = new BlockPoint(point.getRow(), point.getCol());
-
-                    if (isFinalPoint(point)) {
-                        return startPoint.getCol();
-                    }
-                }
-
+            if (point.getRow() == 0) {
+                return point.getCol();
             }
         }
+
         // trả về -1 nếu không tìm được đường đi
         // nhưng theo cách mô tả thì bài toán kiểu gì cũng có đường đi là col (numCols-1)
         return -1;
-    }
-
-    public boolean isFinalPoint(Point point) {
-        return point.equals(finalPoint);
     }
 
     // check is point - can visit (not BlockPoint)
@@ -104,7 +90,7 @@ public class Sol {
     }
 
     private boolean canMove(Point point) {
-        if (canMoveRight(point) || canMoveLeft(point) || canMoveDown(point)) {
+        if (canMoveLeft(point) || canMoveUp(point) || canMoveRight(point)) {
             return true;
         }
         return false;
@@ -141,6 +127,17 @@ public class Sol {
 
     private Point moveDown(Point point) {
         return (Point) mazePoint[point.getRow() + 1][point.getCol()];
+    }
+
+    private boolean canMoveUp(Point point) {
+        if (point.getRow() > 0 && isPoint(point.getRow() - 1, point.getCol())) {
+            return true;
+        }
+        return false;
+    }
+
+    private Point moveUp(Point point) {
+        return (Point) mazePoint[point.getRow() - 1][point.getCol()];
     }
 
     public void initMazePoint(int[][] maze) {
