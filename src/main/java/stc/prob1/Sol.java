@@ -1,6 +1,8 @@
 package stc.prob1;
 
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * @author : hoangtq
@@ -17,62 +19,51 @@ public class Sol {
         for (int testCase = 1; testCase <= 10; testCase++) {
             int subTest = input.nextInt();
 
-            List<Integer> buildings = new ArrayList<>();
+            int arr[] = new int[subTest];
 
             for (int index = 0; index < subTest; index++) {
-                int value = input.nextInt();
-                buildings.add(value);
+                arr[index] = input.nextInt();
             }
-
-            long result = sol.count(buildings);
+            long result = sol.count(arr);
 
             System.out.printf("#%d %d\n", testCase, result);
         }
     }
 
-    public long count(List<Integer> buildings) {
+    public long count(int arr[]) {
         // Trường hợp đặc biệt
-        if (buildings.size() < 5) {
-            buildings.sort(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer i1, Integer i2) {
-                    return i1 - i2;
-                }
-            });
+        if (arr.length < 5) {
 
-            if (buildings.size() > 1) {
-                return buildings.get(buildings.size() - 1) - buildings.get(buildings.size() - 2);
-            } else return buildings.get(0);
+            Arrays.sort(arr);
+            if (arr.length > 1) {
+                return arr[arr.length - 1] - arr[arr.length - 2];
+            } else return arr[0];
         }
 
         long totalHouseholds = 0;
-        for (int i = 0; i < buildings.size() - 2; i++) {
+        for (int i = 0; i < arr.length - 2; i++) {
 
             // tính toán lấy các toà nhà trong phạm vi xét
             int begin = i - 2;
             if (begin < 0) begin = 0;
 
             int end = i + 2;
-            if (end >= buildings.size()) end = buildings.size() - 1;
+            if (end >= arr.length) end = arr.length - 1;
 
             // lấy ra các tòa nhà trong khoảng đang xét
-            List<Integer> subList = new ArrayList<>();
-            for (int index = begin; index <= end; index++) {
-                subList.add(buildings.get(index));
+            int subArr[] = new int[end - begin + 1];
+            int index = 0;
+            for (int currIndex = begin; currIndex <= end; currIndex++) {
+                subArr[index++] = arr[currIndex];
             }
+
             // sort
-            subList.sort(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer i1, Integer i2) {
-                    return i1 - i2;
-                }
-            });
+            Arrays.sort(subArr);
 
             // tìm các hộ thỏa mãn điều kiện đủ không gian mở
-            if (buildings.get(i) == subList.get(subList.size() - 1) && buildings.get(i) > subList.get(subList.size() - 2)) {
-                totalHouseholds += subList.get(subList.size() - 1) - subList.get(subList.size() - 2);
+            if (arr[i] == subArr[subArr.length - 1] && arr[i] > subArr[subArr.length - 2]) {
+                totalHouseholds += subArr[subArr.length - 1] - subArr[subArr.length - 2];
             }
-
         }
         return totalHouseholds;
     }
