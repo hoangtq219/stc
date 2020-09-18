@@ -58,13 +58,44 @@ public class Sol {
             }
 
             // sort
-            Arrays.sort(subArr);
+            int largest = findLargest(subArr);
+            int second = findSecondLargest(subArr, largest);
 
             // tìm các hộ thỏa mãn điều kiện đủ không gian mở
-            if (arr[i] == subArr[subArr.length - 1] && arr[i] > subArr[subArr.length - 2]) {
-                totalHouseholds += subArr[subArr.length - 1] - subArr[subArr.length - 2];
+            if (arr[i] == largest && arr[i] > second) {
+                totalHouseholds += largest - second;
             }
         }
         return totalHouseholds;
     }
+
+    public int findLargest(int subArr[]) {
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < subArr.length; i++) {
+            if (subArr[i] > max) {
+                max = subArr[i];
+            }
+        }
+        return max;
+    }
+
+    public int findSecondLargest(int subArr[], int largest) {
+        int second = Integer.MIN_VALUE;
+        int cnt = 0;
+        for (int i = 0; i < subArr.length; i++) {
+            if (subArr[i] > second) {
+                if (subArr[i] == largest) {
+                    cnt++;
+                }
+                if (cnt == 2) return largest;
+
+                if (subArr[i] > second && subArr[i] != largest) {
+                    second = subArr[i];
+                }
+            }
+        }
+        return second;
+    }
+
 }
