@@ -87,9 +87,7 @@ public class CardExchange {
                 if (cardInfo.compareTo(max) > 0) {
                     previous = max;
                     max = cardInfo;
-                    if (remaining > (totalSwap - remainingSwap)) {
-                        remaining = totalSwap - remainingSwap;
-                    }
+                    remaining = remainingSwap;
                 }
 
                 exchange(cardInfo, remainingSwap, currentIndex + 1);
