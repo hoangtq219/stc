@@ -1,4 +1,4 @@
-package stc.training.greedy;
+package stc.training.backtrack;
 
 import org.junit.Test;
 import training.greedy.CardExchange;
