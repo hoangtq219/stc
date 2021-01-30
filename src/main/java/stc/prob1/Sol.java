@@ -1,6 +1,8 @@
 package stc.prob1;
 
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * @author : hoangtq
@@ -8,67 +10,92 @@ import java.util.*;
  **/
 public class Sol {
     /**
-     *
      * Ý tưởng: tìm số lớn nhất và số lớn thứ 2 trong tất cả các mảng con có 5 phần tử
      * - Nếu phần tử đang xét = số lớn thứ nhất và lớn hơn số thứ 2 thì lấy số lớn nhất trừ đi số lớn thứ 2 là ra số hộ gia đình
-     *
-     * */
-    public List<Integer> buildings = new ArrayList<>();
-
+     */
     public static void main(String[] args) {
         Sol sol = new Sol();
-        sol.buildings = Arrays.asList(0, 0, 225, 214, 82, 73, 241, 233, 179, 219, 135, 62, 36, 13, 6, 71, 179, 77, 67, 139, 31, 90, 9, 37, 93, 203, 150, 69, 19, 137, 28, 174, 32, 80, 64, 54, 18, 0, 158, 73, 173, 20, 0, 102, 107, 48, 50, 161, 246, 145, 225, 31, 0, 153, 185, 157, 44, 126, 153, 233, 0, 201, 83, 103, 191, 0, 45, 0, 131, 87, 97, 105, 97, 209, 157, 22, 0, 29, 132, 74, 2, 232, 44, 203, 0, 51, 0, 244, 212, 212, 89, 53, 50, 244, 207, 144, 72, 143, 0, 0);
-        sol.run(1);
+        Scanner input = new Scanner(System.in);
+        for (int testCase = 1; testCase <= 10; testCase++) {
+            int subTest = input.nextInt();
+
+            int arr[] = new int[subTest];
+
+            for (int index = 0; index < subTest; index++) {
+                arr[index] = input.nextInt();
+            }
+            long result = sol.count(arr);
+
+            System.out.printf("#%d %d\n", testCase, result);
+        }
     }
 
-    public void run(int testCase) {
-        System.out.printf("#%d %d\n", testCase, count());
-    }
-
-    public int count() {
+    public long count(int arr[]) {
         // Trường hợp đặc biệt
-        if (buildings.size() < 5) {
-            buildings.sort(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer i1, Integer i2) {
-                    return i1 - i2;
-                }
-            });
+        if (arr.length < 5) {
 
-            if (buildings.size() > 1) {
-                return buildings.get(buildings.size() - 1) - buildings.get(buildings.size() - 2);
-            } else return buildings.get(0);
+            Arrays.sort(arr);
+            if (arr.length > 1) {
+                return arr[arr.length - 1] - arr[arr.length - 2];
+            } else return arr[0];
         }
 
-        int totalHouseholds = 0;
-        for (int i = 0; i < buildings.size() - 2; i++) {
+        long totalHouseholds = 0;
+        for (int i = 0; i < arr.length - 2; i++) {
 
             // tính toán lấy các toà nhà trong phạm vi xét
             int begin = i - 2;
             if (begin < 0) begin = 0;
 
             int end = i + 2;
-            if (end >= buildings.size()) end = buildings.size() - 1;
+            if (end >= arr.length) end = arr.length - 1;
 
             // lấy ra các tòa nhà trong khoảng đang xét
-            List<Integer> subList = new ArrayList<>();
-            for (int index = begin; index <= end; index++) {
-                subList.add(buildings.get(index));
+            int subArr[] = new int[end - begin + 1];
+            int index = 0;
+            for (int currIndex = begin; currIndex <= end; currIndex++) {
+                subArr[index++] = arr[currIndex];
             }
+
             // sort
-            subList.sort(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer i1, Integer i2) {
-                    return i1 - i2;
-                }
-            });
+            int largest = findLargest(subArr);
+            int second = findSecondLargest(subArr, largest);
 
             // tìm các hộ thỏa mãn điều kiện đủ không gian mở
-            if (buildings.get(i) == subList.get(subList.size() - 1) && buildings.get(i) > subList.get(subList.size() - 2)) {
-                totalHouseholds += subList.get(subList.size() - 1) - subList.get(subList.size() - 2);
+            if (arr[i] == largest && arr[i] > second) {
+                totalHouseholds += largest - second;
             }
-
         }
         return totalHouseholds;
     }
+
+    public int findLargest(int subArr[]) {
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < subArr.length; i++) {
+            if (subArr[i] > max) {
+                max = subArr[i];
+            }
+        }
+        return max;
+    }
+
+    public int findSecondLargest(int subArr[], int largest) {
+        int second = Integer.MIN_VALUE;
+        int cnt = 0;
+        for (int i = 0; i < subArr.length; i++) {
+            if (subArr[i] > second) {
+                if (subArr[i] == largest) {
+                    cnt++;
+                }
+                if (cnt == 2) return largest;
+
+                if (subArr[i] > second && subArr[i] != largest) {
+                    second = subArr[i];
+                }
+            }
+        }
+        return second;
+    }
+
 }
