@@ -1,5 +1,7 @@
 package stc.prob2;
 
+import java.util.Scanner;
+
 /**
  * @author : hoangtq
  * @since : 08:55 15/09/2020, Tue
@@ -8,12 +10,18 @@ public class Sol {
 
     public static void main(String[] args) {
         Sol solution = new Sol();
-        solution.run(1, "1238099084");
-        solution.run(2, "4100112380990844");
+        solution.run();
     }
 
-    public void run(int testCase, String number) {
-        System.out.printf("#%d %s\n", testCase, solved(number));
+    public void run() {
+
+        Scanner input = new Scanner(System.in);
+        for (int testCase = 1; testCase <= 10; testCase++) {
+            String line = input.nextLine();
+            String[] values = line.trim().split("\\s++");
+            System.out.printf("#%d %s\n", testCase, solved(values[1]));
+
+        }
     }
 
     public String solved(String number) {
@@ -21,7 +29,7 @@ public class Sol {
         while (!number.isEmpty()) {
             if (number.length() > begin + 1 && number.charAt(begin) == number.charAt(begin + 1)) {
                 number = remove(number, begin, begin + 1);
-                begin--;
+                if (begin > 0) begin--;
             } else {
                 begin++;
             }
